@@ -1,19 +1,16 @@
-import sys
 from datetime import datetime
-from functools import wraps, update_wrapper, reduce
+from functools import wraps, update_wrapper
 from logging import getLogger
 from typing import Any
-import projects
 
-from flask import Flask, redirect, render_template, current_app, session
+from flask import Flask, redirect, session
 from flask import send_from_directory, request, make_response, Response, json
 from flask_login import login_required, current_user
-from flask_security import Security, SQLAlchemyUserDatastore, logout_user
+from flask_security import Security, SQLAlchemyUserDatastore
 from flask_session import Session
-from sqlalchemy import func
 
 import db
-# import menu_items
+import projects
 import util
 from models import User, Role, Project, ProjectStage, ProjectStatus, ProjectType, ProjectToBeDone
 
@@ -99,6 +96,8 @@ def get_projects():
         client_id = int(request.args.get('client_id')) if request.args.get('client_id') else None
         engineer_id = int(request.args.get('engineer_id')) if request.args.get('engineer_id') else None
         owner_id = int(request.args.get('owner_id')) if request.args.get('owner_id') else None
+        priority = int(request.args.get('priority')) if request.args.get('priority') else None
+        number = request.args.get('number') if request.args.get('number') else None
     except ValueError as e:
         return json_error(str(e))
 
@@ -119,6 +118,12 @@ def get_projects():
 
     if engineer_id is not None:
         query = query.filter(Project.engineer_id == engineer_id)
+
+    if priority is not None:
+        query = query.filter(Project.priority == priority)
+
+    if number is not None:
+        query = query.filter(Project.number == number)
 
     if owner_id is not None:
         query = query.filter(Project.owner_id == owner_id)
@@ -177,23 +182,6 @@ def get_order_filters():
             'engineers': engineers
         }
     })
-
-#
-# @flask_server.route('/api/menu-items-filters', methods=['GET'])
-# @login_required
-# def get_menu_items_filters():
-#     with current_user.restaurant_db_session() as session:
-#         type_options = next(zip(*session.query(MenuItem.type_food)
-#                                 .filter(MenuItem.type_food != '')
-#                                 .filter(MenuItem.type_food != 'deleted')
-#                                 .order_by(MenuItem.type_food)
-#                                 .distinct()
-#                                 .all()))
-#
-#         return json_response({
-#             'type_options': type_options
-#         })
-
 
 def serve(host='0.0.0.0', port=8080):
     flask_server.run(host=host, port=port, threaded=True)

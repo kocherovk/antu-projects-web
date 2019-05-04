@@ -8,6 +8,8 @@ Create Date: 2019-03-09 16:23:47.091023
 from alembic import op
 import sqlalchemy as sa
 
+import sys
+sys.path.append('.')
 
 # revision identifiers, used by Alembic.
 from models import ProjectStage, ProjectStatus, ProjectToBeDone, ProjectType

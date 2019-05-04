@@ -1,10 +1,10 @@
+from datetime import datetime
 from functools import reduce
 
 from flask_login import UserMixin
 from flask_security import RoleMixin
-from sqlalchemy import Column, String, DateTime, Integer, Table, Boolean, ForeignKey
+from sqlalchemy import Column, String, Integer, Table, Boolean, ForeignKey, Numeric, DateTime
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.dialects.mysql import TIMESTAMP
 
 from db import database
 from util import model_to_dict
@@ -65,6 +65,19 @@ class Project(database.Model):
     description = Column(String(1024), nullable=False)
     link = Column(String(255), nullable=True)
     link2 = Column(String(255), nullable=True)
+    invoice_amount = Column(Numeric(10, 2))
+    finance_remarks = Column(String(1024))
+    date_of_order = Column(Integer())
+    deliver_when = Column(Integer())
+    date_finish = Column(Integer())
+    quote_date = Column(Integer())
+    quote_number = Column(String(255))
+    quote_price = Column(Numeric(10, 2))
+    eur = Column(Numeric(10, 2))
+    eur_inv = Column(Numeric(10, 2))
+    nzd = Column(Numeric(10, 2))
+    nzd_inv = Column(Numeric(10, 2))
+    client_po = Column(String(255))
 
 
 user_roles = Table(
@@ -99,9 +112,13 @@ class Role(database.Model, RoleMixin):
                 'project_fields': [
                     'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
                     'engineer_id', 'owner_id', 'priority', 'quantity',
-                    'serials', 'order_number', 'invoice_number',
-                    'invoice_sent', 'invoice_paid', 'number', 'name',
+                    'serials', 'order_number', 'invoice_number', 'number', 'name',
                     'version', 'description', 'link', 'link2',
+
+                    'invoice_sent', 'invoice_paid', 'invoice_amount', 'finance_remarks',
+                    'date_of_order', 'deliver_when', 'date_finish',
+                    'quote_date', 'quote_number', 'quote_price',
+                    'eur', 'eur_inv', 'nzd', 'nzd_inv', 'client_po'
                 ],
                 'can_edit': True,
                 'can_create': True,
@@ -113,7 +130,7 @@ class Role(database.Model, RoleMixin):
                 'project_fields': [
                     'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
                     'engineer_id', 'owner_id', 'priority', 'quantity',
-                    'serials', 'order_number', 'number', 'name',
+                    'serials', 'number', 'name',
                     'version', 'description', 'link', 'link2',
                 ],
                 'can_edit': True,
@@ -126,7 +143,7 @@ class Role(database.Model, RoleMixin):
                 'project_fields': [
                     'stage_id', 'status_id', 'client_id',
                     'engineer_id', 'owner_id', 'priority', 'quantity',
-                    'serials', 'order_number', 'number', 'name',
+                    'serials', 'number', 'name',
                     'version', 'link', 'link2',
                 ],
                 'can_edit': False,
@@ -163,5 +180,6 @@ class User(database.Model, UserMixin):
             'id': self.id,
             'name': self.name,
             'email': self.email,
-            'rights': self.get_rights()
+            'rights': self.get_rights(),
+            'roles': list(map(lambda role: role.name, self.roles))
         }

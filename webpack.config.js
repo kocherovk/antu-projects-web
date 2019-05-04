@@ -36,10 +36,11 @@ module.exports = {
     })
   ],
   devServer: {
-    port: 8081,
+    port: 9000,
+    index: '',
     proxy: [
       {
-        context: ['/login', '/api', '/log-out'],
+        context: ['/login', '/api', '/log-out', '/'],
         target: 'http://127.0.0.1:8080'
       }
     ]

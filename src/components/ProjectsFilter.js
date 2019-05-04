@@ -24,7 +24,9 @@ class ProjectsFilter extends React.Component {
       tobedone_id: '',
       client_id: '',
       engineer_id: '',
-      owner_id: ''
+      owner_id: '',
+      priority: '',
+      number: '',
     },
     filterOptions: {
       'dinner_options': [],
@@ -58,23 +60,6 @@ class ProjectsFilter extends React.Component {
 
     return (
       <Grid container spacing={40} alignContent='center' alignItems='center' >
-        <Grid item lg={2} md={4} sm={6} xs={6}>
-          <TextField
-            select
-            fullWidth
-            label="Stage"
-            value={this.props.filter.stage_id || ''}
-            onChange={(evt) => this.updateFilter('stage_id', evt.target.value)}
-            margin="normal"
-          >
-            <MenuItem key='' value=''>All</MenuItem>
-            {stages.map(option => (
-              <MenuItem key={option.id} value={option.id}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
 
         <Grid item lg={2} md={4} sm={6} xs={6}>
           <TextField
@@ -94,17 +79,57 @@ class ProjectsFilter extends React.Component {
           </TextField>
         </Grid>
 
+        <Grid item lg={1} md={3} sm={6} xs={6}>
+          <TextField
+            fullWidth
+            type='number'
+            label="Priority"
+            value={this.props.filter.priority || ''}
+            onChange={(evt) => this.updateFilter('priority', evt.target.value)}
+            margin="normal"
+          />
+        </Grid>
+
+        <Grid item lg={1} md={3} sm={6} xs={6}>
+          <TextField
+            fullWidth
+            label="Number"
+            value={this.props.filter.number || ''}
+            onChange={(evt) => this.updateFilter('number', evt.target.value)}
+            margin="normal"
+          >
+          </TextField>
+        </Grid>
+
         <Grid item lg={2} md={4} sm={6} xs={6}>
           <TextField
             select
             fullWidth
-            label="Type"
-            value={this.props.filter.type_id || ''}
-            onChange={(evt) => this.updateFilter('type_id', evt.target.value)}
+            label="Owner"
+            value={this.props.filter.owner_id || ''}
+            onChange={(evt) => this.updateFilter('owner_id', evt.target.value)}
             margin="normal"
           >
             <MenuItem key='' value=''>All</MenuItem>
-            {types.map(option => (
+            {engineers.map(option => (
+              <MenuItem key={option.id} value={option.id}>
+                {option.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        <Grid item lg={2} md={4} sm={6} xs={6}>
+          <TextField
+            select
+            fullWidth
+            label="Engineer"
+            value={this.props.filter.engineer_id || ''}
+            onChange={(evt) => this.updateFilter('engineer_id', evt.target.value)}
+            margin="normal"
+          >
+            <MenuItem key='' value=''>All</MenuItem>
+            {engineers.map(option => (
               <MenuItem key={option.id} value={option.id}>
                 {option.name}
               </MenuItem>
@@ -141,24 +166,6 @@ class ProjectsFilter extends React.Component {
           >
             <MenuItem key='' value=''>All</MenuItem>
             {clients.map(option => (
-              <MenuItem key={option.id} value={option.id}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-
-        <Grid item lg={2} md={4} sm={6} xs={6}>
-          <TextField
-            select
-            fullWidth
-            label="Engineer"
-            value={this.props.filter.engineer_id || ''}
-            onChange={(evt) => this.updateFilter('engineer_id', evt.target.value)}
-            margin="normal"
-          >
-            <MenuItem key='' value=''>All</MenuItem>
-            {engineers.map(option => (
               <MenuItem key={option.id} value={option.id}>
                 {option.name}
               </MenuItem>

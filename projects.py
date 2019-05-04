@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Dict, Any
 
 from flask_login import current_user
@@ -20,7 +21,7 @@ def delete(project_id: int):
 
 
 def edit(project_id: int, attrs: Dict[str, Any]) -> Project:
-    old_project = Project.query.filter(Project.id == project_id).one()
+    old_project = Project.query.filter(Project.id == project_id).one()  # type: Project
 
     for key, value in attrs.items():
         setattr(old_project, key, value)

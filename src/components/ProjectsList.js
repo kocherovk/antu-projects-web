@@ -2,6 +2,8 @@ import React from "react";
 import ProjectsFilter from './ProjectsFilter';
 import EnrichedTable from './EnrichedTable';
 import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import ProjectModal from './ProjectModal';
 const querystring = require('querystring');
@@ -28,7 +30,8 @@ class ProjectsList extends React.Component {
     selectedProject: null,
     modalIsVisible: false,
     updating: false,
-    creating: false
+    creating: false,
+    tableViewMode: 'resume'
   };
 
   loadProjects(filter) {
@@ -40,8 +43,6 @@ class ProjectsList extends React.Component {
       selectedProject: false,
       projectsFilter: filter
     });
-
-    console.log(filter);
 
     fetch('/api/projects?' + querystring.stringify(filter))
       .then(res => res.json())
@@ -171,34 +172,67 @@ class ProjectsList extends React.Component {
 
     const rows = [
       { id: 'id', label: 'Id' },
-      { id: 'stage_id', label: 'Stage' },
-      { id: 'status_id', label: 'Status' },
-      { id: 'type_id', label: 'Type' },
-      { id: 'tobedone_id', label: 'To be done' },
-      { id: 'client_id', label: 'Client' },
-      { id: 'engineer_id', label: 'Engineer' },
-      { id: 'owner_id', label: 'Owner' },
       { id: 'priority', label: 'Priority' },
-      { id: 'quantity', label: 'Quantity' },
-      { id: 'serials', label: 'Serials' },
-      { id: 'order_number', label: 'Order number' },
-      { id: 'invoice_number', label: 'Invoice number' },
-      { id: 'invoice_sent', label: 'Invoice sent' },
-      { id: 'invoice_paid', label: 'Invoice paid' },
+      { id: 'status_id', label: 'Status' },
       { id: 'number', label: 'Number' },
       { id: 'name', label: 'Name' },
       { id: 'version', label: 'Version' },
-      { id: 'description', label: 'Description' },
+      { id: 'owner_id', label: 'Owner' },
       { id: 'link', label: 'Link' },
-      { id: 'link2', label: 'Link' }
+      { id: 'link2', label: 'Link' },
+      { id: 'tobedone_id', label: 'To be done' },
+      { id: 'stage_id', label: 'Stage' },
+      { id: 'type_id', label: 'Type' },
+      { id: 'client_id', label: 'Client' },
+      { id: 'engineer_id', label: 'Engineer' },
+      { id: 'quantity', label: 'Quantity' },
+      { id: 'serials', label: 'Serials' },
+      { id: 'description', label: 'Description' },
+      { id: 'order_number', label: 'Order number' },
+      { id: 'eur', label: 'EUR' },
+      { id: 'eur_inv', label: 'EUR inv' },
+      { id: 'nzd', label: 'NZD' },
+      { id: 'nzd_inv', label: 'NZD inv' },
+      { id: 'client_po', label: 'Client PO' },
+      { id: 'quote_date', label: 'Quote date' },
+      { id: 'quote_number', label: 'Quote number' },
+      { id: 'quote_price', label: 'Quote price' },
+      { id: 'invoice_number', label: 'Invoice number' },
+      { id: 'invoice_amount', label: 'Invoice amount' },
+      { id: 'invoice_sent', label: 'Invoice sent' },
+      { id: 'invoice_paid', label: 'Invoice paid' },
+      { id: 'date_of_order', label: 'Date of order' },
+      { id: 'deliver_when', label: 'Deliver' },
+      { id: 'date_finish', label: 'Date finish' },
+      { id: 'finance_remarks', label: 'Finance remarks' },
     ];
 
+    const rowsPerViewMode = {
+      'all': rows.map(r => r.id),
+      'finance': [
+        'number', 'name', 'client_id',
+        'order_number', 'eur', 'eur_inv', 'nzd', 'nzd_inv', 'client_po', 
+        'quote_date', 'quote_number', 'quote_price',
+        'invoice_number', 'invoice_amount', 'invoice_sent', 'invoice_paid',
+        'date_of_order', 'deliver_when', 'date_finish', 'finance_remarks'
+      ],
+      'resume': [
+        'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
+         'engineer_id', 'owner_id', 'priority', 'quantity', 'serials',
+          'number', 'name', 'version', 'description'
+      ]
+    };
+
     let availableRows = [];
+    let displayTableViewModeSelect = false;
 
     if (this.props.currentUser) {
-      availableRows = rows.filter((r) => 
-        this.props.currentUser.rights.project_fields.indexOf(r.id) != -1);
-    }
+      displayTableViewModeSelect = this.props.currentUser.roles.indexOf('admin') != -1;
+      availableRows = rows.filter((r) => {
+        return  this.props.currentUser.rights.project_fields.indexOf(r.id) != -1 &&
+                rowsPerViewMode[this.state.tableViewMode].indexOf(r.id) != -1;
+      }
+    )}
 
     projectsRows = this.state.projects.map(p => {
       const stage = options.stages.find(s => s.id == p.stage_id);
@@ -219,7 +253,11 @@ class ProjectsList extends React.Component {
         engineer_id: engineer && engineer.name,
         owner_id: owner && owner.name,
         invoice_paid: new Date(p.invoice_paid * 1000).toDateString(),
-        invoice_sent: new Date(p.invoice_sent * 1000).toDateString()
+        invoice_sent: new Date(p.invoice_sent * 1000).toDateString(),
+        date_of_order: new Date(p.date_of_order * 1000).toDateString(),
+        deliver_when: new Date(p.deliver_when * 1000).toDateString(),
+        date_finish: new Date(p.date_finish * 1000).toDateString(),
+        quote_date: new Date(p.quote_date * 1000).toDateString(),
       };
     });
 
@@ -242,6 +280,20 @@ class ProjectsList extends React.Component {
           onChange={(filter) => this.loadProjects(filter)}
           canView={(field) => this.canView(field)}
         />
+        {displayTableViewModeSelect && <Grid item lg={2} md={4} sm={6} xs={6}>
+          <TextField
+            select
+            fullWidth
+            label="View"
+            value={this.state.tableViewMode}
+            onChange={(evt) => this.setState({tableViewMode: evt.target.value})}
+            margin="normal"
+          >
+            <MenuItem value='all'>All</MenuItem>
+            <MenuItem value='finance'>Finance</MenuItem>
+            <MenuItem value='resume'>Resume</MenuItem>
+          </TextField>
+        </Grid>}
         <Grid container spacing={24}>
           <Grid item lg={12} md={12}>
             <EnrichedTable

@@ -2,7 +2,7 @@ import React from "react";
 import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import AppBar from '@material-ui/core/AppBar';
-import Restaurant from '@material-ui/icons/Restaurant';
+import Person from '@material-ui/icons/Person';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -30,6 +30,10 @@ const styles = theme => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
+  },
+  main: {
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2
   }
 });
 
@@ -73,7 +77,7 @@ class App extends React.Component {
           <CssBaseline />
           <AppBar position="static" className={this.props.classes.appBar}>
             <Toolbar>
-              <Restaurant className={this.props.classes.icon} />
+              <Person className={this.props.classes.icon} />
               <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
                 {uerRole} {username}
               </Typography>
@@ -82,7 +86,7 @@ class App extends React.Component {
               </Button>
             </Toolbar>
           </AppBar>
-          <main>
+          <main className={this.props.classes.main}>
             <ProjectsList currentUser={this.state.currentUser}/>
           </main>
         </React.Fragment>

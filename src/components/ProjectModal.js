@@ -238,7 +238,7 @@ class ProjectModal extends React.Component {
                 ))}
               </TextField>
             </Grid>
-            <Grid item lg={2} md={2} sm={6} xs={6}>
+            <Grid item lg={1} md={1} sm={6} xs={6}>
               <TextField
                 fullWidth
                 type='number'
@@ -248,7 +248,7 @@ class ProjectModal extends React.Component {
                 margin="normal"
               />
             </Grid>
-            <Grid item lg={2} md={2} sm={6} xs={6}>
+            <Grid item lg={1} md={1} sm={6} xs={6}>
               <TextField
                 fullWidth
                 type='number'
@@ -267,7 +267,7 @@ class ProjectModal extends React.Component {
                 margin="normal"
               />
             </Grid>
-            <Grid item lg={2} md={2} sm={6} xs={6}>
+            {canView('order_number') && <Grid item lg={2} md={2} sm={6} xs={6}>
               <TextField
                 fullWidth
                 label="Order Number"
@@ -276,13 +276,143 @@ class ProjectModal extends React.Component {
                 margin="normal"
               >
               </TextField>
-            </Grid>
+            </Grid> }
+            {canView('date_of_order') && <Grid item lg={2} md={2} sm={6} xs={6}>
+            <DatePicker
+                autoOk
+                clearable
+                label='Date of order'
+                margin="normal"
+                value={project.date_of_order && moment.unix(project.date_of_order)}
+                onChange={m => this.setProjectAttribute('date_of_order', m && m.unix())}
+                style={{ width: '100%' }}
+              />
+            </Grid> }
+            {canView('deliver_when') && <Grid item lg={2} md={2} sm={6} xs={6}>
+            <DatePicker
+                autoOk
+                clearable
+                label='Deliver'
+                margin="normal"
+                value={project.deliver_when && moment.unix(project.deliver_when)}
+                onChange={m => this.setProjectAttribute('deliver_when', m && m.unix())}
+                style={{ width: '100%' }}
+              />
+            </Grid> }
+            {canView('date_finish') && <Grid item lg={2} md={2} sm={6} xs={6}>
+            <DatePicker
+                autoOk
+                clearable
+                label='Date Finish'
+                margin="normal"
+                value={project.date_finish && moment.unix(project.date_finish)}
+                onChange={m => this.setProjectAttribute('date_finish', m && m.unix())}
+                style={{ width: '100%' }}
+              />
+            </Grid> }
+            {canView('quote_date') && <Grid item lg={2} md={2} sm={6} xs={6}>
+            <DatePicker
+                autoOk
+                clearable
+                label='Quote Date'
+                margin="normal"
+                value={project.quote_date && moment.unix(project.quote_date)}
+                onChange={m => this.setProjectAttribute('quote_date', m && m.unix())}
+                style={{ width: '100%' }}
+              />
+            </Grid> }
+            {canView('quote_number') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="Quote Number"
+                value={project.quote_number}
+                onChange={this.handleChange('quote_number')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+            {canView('quote_price') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="Quote price"
+                type="number"
+                value={project.quote_price}
+                onChange={this.handleChange('quote_price')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+            {canView('client_po') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="Client PO"
+                value={project.client_po}
+                onChange={this.handleChange('client_po')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+            {canView('eur') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="EUR"
+                type="number"
+                value={project.eur}
+                onChange={this.handleChange('eur')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+            {canView('eur_inv') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="EUR inv"
+                type="number"
+                value={project.eur_inv}
+                onChange={this.handleChange('eur_inv')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+            {canView('nzd') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="NZD"
+                type="number"
+                value={project.nzd}
+                onChange={this.handleChange('nzd')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+            {canView('nzd_inv') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="NZD inv"
+                type="number"
+                value={project.nzd_inv}
+                onChange={this.handleChange('nzd_inv')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
             {canView('invoice_number') && <Grid item lg={2} md={2} sm={6} xs={6}>
               <TextField
                 fullWidth
                 label="Invoice Number"
                 value={project.invoice_number}
                 onChange={this.handleChange('invoice_number')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+            {canView('invoice_amount') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="Invoice Amount"
+                type="number"
+                value={project.invoice_amount}
+                onChange={this.handleChange('invoice_amount')}
                 margin="normal"
               >
               </TextField>
@@ -339,7 +469,7 @@ class ProjectModal extends React.Component {
               >
               </TextField>
             </Grid>
-            <Grid item lg={6} md={6} sm={6} xs={6}>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <TextField
                 fullWidth
                 label="Link1"
@@ -349,7 +479,7 @@ class ProjectModal extends React.Component {
               >
               </TextField>
             </Grid>
-            <Grid item lg={6} md={6} sm={6} xs={6}>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <TextField
                 fullWidth
                 label="Link2"
@@ -371,6 +501,18 @@ class ProjectModal extends React.Component {
                 margin="normal"
               />
             </Grid>
+            {canView('finance_remarks') && <Grid item lg={6} md={6} sm={12} xs={12}>
+            <TextField
+                fullWidth
+                label="Finance remarks"
+                multiline
+                rowsMax={4}
+                rows={4}
+                value={project.finance_remarks}
+                onChange={this.handleChange('finance_remarks')}
+                margin="normal"
+              />
+            </Grid>}
           </Grid>
           {this.props.creating &&
             <Button raised color="primary" onClick={() => this.handleCreateProject()}>
