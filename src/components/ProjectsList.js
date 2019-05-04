@@ -252,12 +252,12 @@ class ProjectsList extends React.Component {
         client_id: client && client.name,
         engineer_id: engineer && engineer.name,
         owner_id: owner && owner.name,
-        invoice_paid: new Date(p.invoice_paid * 1000).toDateString(),
-        invoice_sent: new Date(p.invoice_sent * 1000).toDateString(),
-        date_of_order: new Date(p.date_of_order * 1000).toDateString(),
-        deliver_when: new Date(p.deliver_when * 1000).toDateString(),
-        date_finish: new Date(p.date_finish * 1000).toDateString(),
-        quote_date: new Date(p.quote_date * 1000).toDateString(),
+        invoice_paid: p.invoice_paid && new Date(p.invoice_paid * 1000).toDateString(),
+        invoice_sent: p.invoice_sent && new Date(p.invoice_sent * 1000).toDateString(),
+        date_of_order: p.date_of_order && new Date(p.date_of_order * 1000).toDateString(),
+        deliver_when: p.deliver_when && new Date(p.deliver_when * 1000).toDateString(),
+        date_finish: p.date_finish && new Date(p.date_finish * 1000).toDateString(),
+        quote_date: p.quote_date && new Date(p.quote_date * 1000).toDateString(),
       };
     });
 

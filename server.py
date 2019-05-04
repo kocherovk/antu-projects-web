@@ -1,3 +1,4 @@
+import decimal
 from datetime import datetime
 from functools import wraps, update_wrapper
 from logging import getLogger
@@ -32,8 +33,15 @@ flask_server.security = Security(flask_server, security_storage)
 Session(flask_server)
 
 
+def decimal_default(obj):
+    if isinstance(obj, decimal.Decimal):
+        print(obj)
+        return float(obj)
+    raise TypeError
+
+
 def json_response(result: Any) -> Response:
-    response = make_response(json.dumps(result))
+    response = make_response(json.dumps(result, default=decimal_default))
     response.headers['Content-Type'] = 'application/json'
     return response
 
