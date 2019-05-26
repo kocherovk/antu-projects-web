@@ -242,9 +242,12 @@ class ProjectsList extends React.Component {
       const client = options.users.clients.find(s => s.id == p.client_id);
       const engineer = options.users.engineers.find(s => s.id == p.engineer_id);
       const owner = options.users.engineers.find(s => s.id == p.owner_id);
+      const link = p.link && <a href={p.link}>open link</a>;
+      const link2 = p.link2 && <a href={p.link2}>open link</a>;
 
       return {
         ...p,
+        link, link2,
         stage_id: stage && stage.name,
         status_id: status && status.name,
         type_id: type && type.name,

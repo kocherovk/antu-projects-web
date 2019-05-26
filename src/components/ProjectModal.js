@@ -210,7 +210,7 @@ class ProjectModal extends React.Component {
               <TextField
                 select
                 fullWidth
-                label="Egineer"
+                label="Engineer"
                 value={project.engineer_id || ''}
                 onChange={this.handleChange('engineer_id')}
                 margin="normal"
