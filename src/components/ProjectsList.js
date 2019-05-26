@@ -219,7 +219,7 @@ class ProjectsList extends React.Component {
       'resume': [
         'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
          'engineer_id', 'owner_id', 'priority', 'quantity', 'serials',
-          'number', 'name', 'version', 'description'
+          'number', 'name', 'version', 'description', 'link', 'link2'
       ]
     };
 
