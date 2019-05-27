@@ -12,14 +12,19 @@ with flask_server.app_context():
     data_store.commit()
 
     users = [
-        'admin', 'staff', 'accountant', 'client'
+        {'name': 'admin', 'role': 'admin'},
+        {'name': 'staff', 'role': 'staff'},
+        {'name': 'accountant', 'role': 'accountant'},
+        {'name': 'client1', 'role': 'client'},
+        {'name': 'client2', 'role': 'client'},
+        {'name': 'client3', 'role': 'client'},
     ]
 
     for user in users:
-        user_password = hash_password(user)
+        user_password = hash_password(user['name'])
 
         data_store.create_user(
-            email=user, password=user_password, active=True, roles=[user]
+            email=user['name'], password=user_password, active=True, roles=[user['role']]
         )
 
     data_store.commit()

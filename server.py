@@ -13,7 +13,7 @@ from flask_session import Session
 import db
 import projects
 import util
-from models import User, Role, Project, ProjectStage, ProjectStatus, ProjectType, ProjectToBeDone
+from models import User, Role, Project, ProjectStage, ProjectStatus, ProjectType, ProjectToBeDone, FinanceStatus
 
 logger = getLogger()
 
@@ -175,6 +175,7 @@ def get_order_filters():
     statuses = [status.to_dict() for status in ProjectStatus.query.all()]
     types = [type.to_dict() for type in ProjectType.query.all()]
     tobedones = [tbd.to_dict() for tbd in ProjectToBeDone.query.all()]
+    financeStatuses = [status.to_dict() for status in FinanceStatus.query.all()]
     users = User.query.all()
 
     clients = [user.to_dict() for user in users if user.has_role('client')]
@@ -182,6 +183,7 @@ def get_order_filters():
 
     return json_response({
         'statuses': statuses,
+        'financeStatuses': financeStatuses,
         'types': types,
         'stages': stages,
         'tobedones': tobedones,
@@ -190,6 +192,7 @@ def get_order_filters():
             'engineers': engineers
         }
     })
+
 
 def serve(host='0.0.0.0', port=8080):
     flask_server.run(host=host, port=port, threaded=True)

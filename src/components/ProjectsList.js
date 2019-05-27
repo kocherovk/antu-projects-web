@@ -4,6 +4,7 @@ import EnrichedTable from './EnrichedTable';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import ProjectModal from './ProjectModal';
 const querystring = require('querystring');
@@ -24,6 +25,7 @@ class ProjectsList extends React.Component {
       types: [],
       stages: [],
       statuses: [],
+      financeStatuses: [],
       tobedones: [],
       users: { clients: [], engineers: [] },
     },
@@ -172,6 +174,7 @@ class ProjectsList extends React.Component {
 
     const rows = [
       { id: 'id', label: 'Id' },
+      { id: 'finance_status_id', label: 'Finance status' },
       { id: 'priority', label: 'Priority' },
       { id: 'status_id', label: 'Status' },
       { id: 'number', label: 'Number' },
@@ -210,7 +213,7 @@ class ProjectsList extends React.Component {
     const rowsPerViewMode = {
       'all': rows.map(r => r.id),
       'finance': [
-        'number', 'name', 'client_id',
+        'number', 'name', 'client_id', 'finance_status_id',
         'order_number', 'eur', 'eur_inv', 'nzd', 'nzd_inv', 'client_po', 
         'quote_date', 'quote_number', 'quote_price',
         'invoice_number', 'invoice_amount', 'invoice_sent', 'invoice_paid',
@@ -218,8 +221,8 @@ class ProjectsList extends React.Component {
       ],
       'resume': [
         'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
-         'engineer_id', 'owner_id', 'priority', 'quantity', 'serials',
-          'number', 'name', 'version', 'description', 'link', 'link2'
+        'engineer_id', 'owner_id', 'priority', 'quantity', 'serials',
+        'number', 'name', 'version', 'description', 'link', 'link2'
       ]
     };
 
@@ -239,11 +242,16 @@ class ProjectsList extends React.Component {
       const status = options.statuses.find(s => s.id == p.status_id);
       const type = options.types.find(s => s.id == p.type_id);
       const tobedone = options.tobedones.find(s => s.id == p.tobedone_id);
+      const financeStatus = options.financeStatuses.find(s => s.id == p.finance_status_id);
       const client = options.users.clients.find(s => s.id == p.client_id);
       const engineer = options.users.engineers.find(s => s.id == p.engineer_id);
       const owner = options.users.engineers.find(s => s.id == p.owner_id);
       const link = p.link && <a href={p.link}>open link</a>;
       const link2 = p.link2 && <a href={p.link2}>open link</a>;
+      
+      const financeStatusChip = financeStatus && <Chip style={{
+        backgroundColor: financeStatus.colour, color: 'white'
+      }} label={financeStatus.name}/>;
 
       return {
         ...p,
@@ -254,6 +262,7 @@ class ProjectsList extends React.Component {
         tobedone_id: tobedone && tobedone.name,
         client_id: client && client.name,
         engineer_id: engineer && engineer.name,
+        finance_status_id: financeStatusChip,
         owner_id: owner && owner.name,
         invoice_paid: p.invoice_paid && new Date(p.invoice_paid * 1000).toDateString(),
         invoice_sent: p.invoice_sent && new Date(p.invoice_sent * 1000).toDateString(),

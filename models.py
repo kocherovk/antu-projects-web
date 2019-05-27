@@ -34,6 +34,14 @@ class ProjectToBeDone(database.Model):
     name = Column(String(255), nullable=True)
 
 
+class FinanceStatus(database.Model):
+    __tablename__ = 'finance_statuses'
+
+    id = Column(Integer(), primary_key=True)
+    name = Column(String(32), nullable=True)
+    colour = Column(String(16), nullable=True)
+
+
 class ProjectType(database.Model):
     __tablename__ = 'project_types'
 
@@ -47,6 +55,7 @@ class Project(database.Model):
     id = Column(Integer(), primary_key=True)
     stage_id = Column(Integer(), nullable=True)
     status_id = Column(Integer(), nullable=True)
+    finance_status_id = Column(Integer(), nullable=True)
     type_id = Column(Integer(), nullable=True)
     tobedone_id = Column(Integer(), nullable=True)
     client_id = Column(Integer(), nullable=True)
@@ -100,7 +109,7 @@ class Role(database.Model, RoleMixin):
             return {
                 'project_fields': [
                     'number', 'name', 'client_id', 'order_number',
-                    'invoice_number', 'invoice_sent', 'invoice_paid'
+                    'invoice_number', 'invoice_sent', 'invoice_paid', 'finance_status_id'
                 ],
                 'can_edit': False,
                 'can_create': False,
@@ -115,7 +124,7 @@ class Role(database.Model, RoleMixin):
                     'serials', 'order_number', 'invoice_number', 'number', 'name',
                     'version', 'description', 'link', 'link2',
 
-                    'invoice_sent', 'invoice_paid', 'invoice_amount', 'finance_remarks',
+                    'invoice_sent', 'invoice_paid', 'invoice_amount', 'finance_remarks', 'finance_status_id',
                     'date_of_order', 'deliver_when', 'date_finish',
                     'quote_date', 'quote_number', 'quote_price',
                     'eur', 'eur_inv', 'nzd', 'nzd_inv', 'client_po'

@@ -77,6 +77,7 @@ class ProjectModal extends React.Component {
     const defaultProject = {
       stage_id: 1,
       status_id: 1,
+      finance_status_id: null,
       type_id: 3,
       tobedone_id: 1,
       client_id: '',
@@ -238,6 +239,23 @@ class ProjectModal extends React.Component {
                 ))}
               </TextField>
             </Grid>
+            <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                select
+                fullWidth
+                label="Finance Status"
+                value={project.finance_status_id || ''}
+                onChange={this.handleChange('finance_status_id')}
+                margin="normal"
+              >
+                <MenuItem value={null}>None</MenuItem >
+                {projectsFieldsOptions.financeStatuses.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem >
+                ))}
+              </TextField>
+            </Grid>
             <Grid item lg={1} md={1} sm={6} xs={6}>
               <TextField
                 fullWidth
@@ -283,7 +301,7 @@ class ProjectModal extends React.Component {
                 clearable
                 label='Date of order'
                 margin="normal"
-                value={project.date_of_order && moment.unix(project.date_of_order)}
+                value={project.date_of_order && moment.unix(project.date_of_order) || null}
                 onChange={m => this.setProjectAttribute('date_of_order', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -294,7 +312,7 @@ class ProjectModal extends React.Component {
                 clearable
                 label='Deliver'
                 margin="normal"
-                value={project.deliver_when && moment.unix(project.deliver_when)}
+                value={project.deliver_when && moment.unix(project.deliver_when) || null}
                 onChange={m => this.setProjectAttribute('deliver_when', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -305,7 +323,7 @@ class ProjectModal extends React.Component {
                 clearable
                 label='Date Finish'
                 margin="normal"
-                value={project.date_finish && moment.unix(project.date_finish)}
+                value={project.date_finish && moment.unix(project.date_finish) || null}
                 onChange={m => this.setProjectAttribute('date_finish', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -316,7 +334,7 @@ class ProjectModal extends React.Component {
                 clearable
                 label='Quote Date'
                 margin="normal"
-                value={project.quote_date && moment.unix(project.quote_date)}
+                value={project.quote_date && moment.unix(project.quote_date) || null}
                 onChange={m => this.setProjectAttribute('quote_date', m && m.unix())}
                 style={{ width: '100%' }}
               />
