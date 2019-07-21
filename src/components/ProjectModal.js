@@ -95,8 +95,8 @@ class ProjectModal extends React.Component {
       version: '',
       description: '',
       link: '',
-      link2: '',
-    }
+      link2: ''
+    };
 
     if (this.props.updating) {
       return { ...this.props.project, ...this.state.project }
@@ -111,6 +111,7 @@ class ProjectModal extends React.Component {
     const { classes, projectsFieldsOptions } = this.props;
 
     const canView = (field) => this.props.canView(field);
+    const canEdit = (field) => this.props.canEdit(field);
 
     let project = this.currentProject();
 
@@ -133,6 +134,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Stage"
                 value={project.stage_id}
+                disabled={!canEdit('stage_id')}
                 onChange={this.handleChange('stage_id')}
                 margin="normal"
               >
@@ -149,6 +151,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Status"
                 value={project.status_id}
+                disabled={!canEdit('status_id')}
                 onChange={this.handleChange('status_id')}
                 margin="normal"
               >
@@ -165,6 +168,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Type"
                 value={project.type_id}
+                disabled={!canEdit('type_id')}
                 onChange={this.handleChange('type_id')}
                 margin="normal"
               >
@@ -181,6 +185,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="To Be Done"
                 value={project.tobedone_id}
+                disabled={!canEdit('tobedone_id')}
                 onChange={this.handleChange('tobedone_id')}
                 margin="normal"
               >
@@ -197,6 +202,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Client"
                 value={project.client_id || ''}
+                disabled={!canEdit('client_id')}
                 onChange={this.handleChange('client_id')}
                 margin="normal"
               >
@@ -213,6 +219,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Engineer"
                 value={project.engineer_id || ''}
+                disabled={!canEdit('engineer_id')}
                 onChange={this.handleChange('engineer_id')}
                 margin="normal"
               >
@@ -229,6 +236,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Owner"
                 value={project.owner_id || ''}
+                disabled={!canEdit('owner_id')}
                 onChange={this.handleChange('owner_id')}
                 margin="normal"
               >
@@ -245,6 +253,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Finance Status"
                 value={project.finance_status_id || ''}
+                disabled={!canEdit('finance_status_id')}
                 onChange={this.handleChange('finance_status_id')}
                 margin="normal"
               >
@@ -262,6 +271,7 @@ class ProjectModal extends React.Component {
                 type='number'
                 label="Priority"
                 value={project.priority}
+                disabled={!canEdit('priority')}
                 onChange={this.handleChange('priority')}
                 margin="normal"
               />
@@ -272,6 +282,7 @@ class ProjectModal extends React.Component {
                 type='number'
                 label="Quantity"
                 value={project.quantity}
+                disabled={!canEdit('quantity')}
                 onChange={this.handleChange('quantity')}
                 margin="normal"
               />
@@ -281,6 +292,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Serials"
                 value={project.serials}
+                disabled={!canEdit('serials')}
                 onChange={this.handleChange('serials')}
                 margin="normal"
               />
@@ -290,6 +302,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Order Number"
                 value={project.order_number}
+                disabled={!canEdit('order_number')}
                 onChange={this.handleChange('order_number')}
                 margin="normal"
               >
@@ -302,6 +315,7 @@ class ProjectModal extends React.Component {
                 label='Date of order'
                 margin="normal"
                 value={project.date_of_order && moment.unix(project.date_of_order) || null}
+                disabled={!canEdit('date_of_order')}
                 onChange={m => this.setProjectAttribute('date_of_order', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -313,6 +327,7 @@ class ProjectModal extends React.Component {
                 label='Deliver'
                 margin="normal"
                 value={project.deliver_when && moment.unix(project.deliver_when) || null}
+                disabled={!canEdit('deliver_when')}
                 onChange={m => this.setProjectAttribute('deliver_when', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -324,6 +339,7 @@ class ProjectModal extends React.Component {
                 label='Date Finish'
                 margin="normal"
                 value={project.date_finish && moment.unix(project.date_finish) || null}
+                disabled={!canEdit('date_finish')}
                 onChange={m => this.setProjectAttribute('date_finish', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -335,6 +351,7 @@ class ProjectModal extends React.Component {
                 label='Quote Date'
                 margin="normal"
                 value={project.quote_date && moment.unix(project.quote_date) || null}
+                disabled={!canEdit('quote_date')}
                 onChange={m => this.setProjectAttribute('quote_date', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -344,6 +361,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Quote Number"
                 value={project.quote_number}
+                disabled={!canEdit('quote_number')}
                 onChange={this.handleChange('quote_number')}
                 margin="normal"
               >
@@ -353,9 +371,22 @@ class ProjectModal extends React.Component {
               <TextField
                 fullWidth
                 label="Quote price"
-                type="number"
+                type="text"
                 value={project.quote_price}
+                disabled={!canEdit('quote_price')}
                 onChange={this.handleChange('quote_price')}
+                margin="normal"
+              >
+              </TextField>
+            </Grid>}
+              {canView('still_to_invoice') && <Grid item lg={2} md={2} sm={6} xs={6}>
+              <TextField
+                fullWidth
+                label="Still To Invoice"
+                type="text"
+                value={project.still_to_invoice || ''}
+                disabled={!canEdit('still_to_invoice')}
+                onChange={this.handleChange('still_to_invoice')}
                 margin="normal"
               >
               </TextField>
@@ -365,51 +396,8 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Client PO"
                 value={project.client_po}
+                disabled={!canEdit('client_po')}
                 onChange={this.handleChange('client_po')}
-                margin="normal"
-              >
-              </TextField>
-            </Grid>}
-            {canView('eur') && <Grid item lg={2} md={2} sm={6} xs={6}>
-              <TextField
-                fullWidth
-                label="EUR"
-                type="number"
-                value={project.eur}
-                onChange={this.handleChange('eur')}
-                margin="normal"
-              >
-              </TextField>
-            </Grid>}
-            {canView('eur_inv') && <Grid item lg={2} md={2} sm={6} xs={6}>
-              <TextField
-                fullWidth
-                label="EUR inv"
-                type="number"
-                value={project.eur_inv}
-                onChange={this.handleChange('eur_inv')}
-                margin="normal"
-              >
-              </TextField>
-            </Grid>}
-            {canView('nzd') && <Grid item lg={2} md={2} sm={6} xs={6}>
-              <TextField
-                fullWidth
-                label="NZD"
-                type="number"
-                value={project.nzd}
-                onChange={this.handleChange('nzd')}
-                margin="normal"
-              >
-              </TextField>
-            </Grid>}
-            {canView('nzd_inv') && <Grid item lg={2} md={2} sm={6} xs={6}>
-              <TextField
-                fullWidth
-                label="NZD inv"
-                type="number"
-                value={project.nzd_inv}
-                onChange={this.handleChange('nzd_inv')}
                 margin="normal"
               >
               </TextField>
@@ -419,6 +407,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Invoice Number"
                 value={project.invoice_number}
+                disabled={!canEdit('invoice_number')}
                 onChange={this.handleChange('invoice_number')}
                 margin="normal"
               >
@@ -430,6 +419,7 @@ class ProjectModal extends React.Component {
                 label="Invoice Amount"
                 type="number"
                 value={project.invoice_amount}
+                disabled={!canEdit('invoice_amount')}
                 onChange={this.handleChange('invoice_amount')}
                 margin="normal"
               >
@@ -442,6 +432,7 @@ class ProjectModal extends React.Component {
                 label='Invoice Sent'
                 margin="normal"
                 value={project.invoice_sent && moment.unix(project.invoice_sent)}
+                disabled={!canEdit('invoice_sent')}
                 onChange={m => this.setProjectAttribute('invoice_sent', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -453,6 +444,7 @@ class ProjectModal extends React.Component {
                 label='Invoice Paid'
                 margin="normal"
                 value={project.invoice_paid && moment.unix(project.invoice_paid)}
+                disabled={!canEdit('invoice_paid')}
                 onChange={m => this.setProjectAttribute('invoice_paid', m && m.unix())}
                 style={{ width: '100%' }}
               />
@@ -462,6 +454,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Number"
                 value={project.number}
+                disabled={!canEdit('number')}
                 onChange={this.handleChange('number')}
                 margin="normal"
               >
@@ -472,6 +465,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Name"
                 value={project.name}
+                disabled={!canEdit('name')}
                 onChange={this.handleChange('name')}
                 margin="normal"
               >
@@ -482,6 +476,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Version"
                 value={project.version}
+                disabled={!canEdit('version')}
                 onChange={this.handleChange('version')}
                 margin="normal"
               >
@@ -492,6 +487,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Link1"
                 value={project.link}
+                disabled={!canEdit('link')}
                 onChange={this.handleChange('link')}
                 margin="normal"
               >
@@ -502,6 +498,7 @@ class ProjectModal extends React.Component {
                 fullWidth
                 label="Link2"
                 value={project.link2}
+                disabled={!canEdit('link2')}
                 onChange={this.handleChange('link2')}
                 margin="normal"
               >
@@ -515,6 +512,7 @@ class ProjectModal extends React.Component {
                 rowsMax={4}
                 rows={4}
                 value={project.description}
+                disabled={!canEdit('description')}
                 onChange={this.handleChange('description')}
                 margin="normal"
               />
@@ -527,6 +525,7 @@ class ProjectModal extends React.Component {
                 rowsMax={4}
                 rows={4}
                 value={project.finance_remarks}
+                disabled={!canEdit('finance_remarks')}
                 onChange={this.handleChange('finance_remarks')}
                 margin="normal"
               />

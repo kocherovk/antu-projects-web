@@ -19,7 +19,7 @@ class ProjectsFilter extends React.Component {
   static defaultProps = {
     filter: {
       stage_id: '',
-      status_id: '',
+      status_id: '1',
       type_id: '',
       tobedone_id: '',
       client_id: '',
@@ -137,7 +137,7 @@ class ProjectsFilter extends React.Component {
           </TextField>
         </Grid>
 
-        <Grid item lg={2} md={4} sm={6} xs={6}>
+          {this.props.canView('client_id') && <Grid item lg={2} md={4} sm={6} xs={6}>
           <TextField
             select
             fullWidth
@@ -153,9 +153,9 @@ class ProjectsFilter extends React.Component {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
+        </Grid>}
 
-        <Grid item lg={2} md={4} sm={6} xs={6}>
+          {this.props.canView('client_id') && <Grid item lg={2} md={4} sm={6} xs={6}>
           <TextField
             select
             fullWidth
@@ -171,7 +171,7 @@ class ProjectsFilter extends React.Component {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
+        </Grid>}
 
       </Grid>
     );

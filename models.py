@@ -81,11 +81,8 @@ class Project(database.Model):
     date_finish = Column(Integer())
     quote_date = Column(Integer())
     quote_number = Column(String(255))
-    quote_price = Column(Numeric(10, 2))
-    eur = Column(Numeric(10, 2))
-    eur_inv = Column(Numeric(10, 2))
-    nzd = Column(Numeric(10, 2))
-    nzd_inv = Column(Numeric(10, 2))
+    quote_price = Column(String(128))
+    still_to_invoice = Column(String(255))
     client_po = Column(String(255))
 
 
@@ -107,10 +104,15 @@ class Role(database.Model, RoleMixin):
     def get_rights(self):
         if self.name == 'accountant':
             return {
-                'project_fields': [
-                    'number', 'name', 'client_id', 'order_number',
-                    'invoice_number', 'invoice_sent', 'invoice_paid', 'finance_status_id'
-                ],
+                'project_fields': {
+                    'view': [
+                        'number', 'name', 'client_id', 'order_number',
+                        'invoice_number', 'invoice_sent', 'invoice_paid', 'finance_status_id'
+                    ],
+                    'edit': [
+                        'number', 'name', 'client_id', 'order_number',
+                        'invoice_number', 'invoice_sent', 'invoice_paid', 'finance_status_id'
+                    ]},
                 'can_edit': False,
                 'can_create': False,
                 'can_delete': False,
@@ -118,17 +120,27 @@ class Role(database.Model, RoleMixin):
 
         if self.name == 'admin':
             return {
-                'project_fields': [
-                    'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
-                    'engineer_id', 'owner_id', 'priority', 'quantity',
-                    'serials', 'order_number', 'invoice_number', 'number', 'name',
-                    'version', 'description', 'link', 'link2',
+                'project_fields': {
+                    'view': [
+                        'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
+                        'engineer_id', 'owner_id', 'priority', 'quantity',
+                        'serials', 'order_number', 'invoice_number', 'number', 'name',
+                        'version', 'description', 'link', 'link2',
 
-                    'invoice_sent', 'invoice_paid', 'invoice_amount', 'finance_remarks', 'finance_status_id',
-                    'date_of_order', 'deliver_when', 'date_finish',
-                    'quote_date', 'quote_number', 'quote_price',
-                    'eur', 'eur_inv', 'nzd', 'nzd_inv', 'client_po'
-                ],
+                        'invoice_sent', 'invoice_paid', 'invoice_amount', 'finance_remarks', 'finance_status_id',
+                        'date_of_order', 'deliver_when', 'date_finish',
+                        'quote_date', 'quote_number', 'quote_price', 'client_po', 'still_to_invoice'
+                    ],
+                    'edit': [
+                        'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
+                        'engineer_id', 'owner_id', 'priority', 'quantity',
+                        'serials', 'order_number', 'invoice_number', 'number', 'name',
+                        'version', 'description', 'link', 'link2',
+
+                        'invoice_sent', 'invoice_paid', 'invoice_amount', 'finance_remarks', 'finance_status_id',
+                        'date_of_order', 'deliver_when', 'date_finish',
+                        'quote_date', 'quote_number', 'quote_price', 'client_po', 'still_to_invoice'
+                    ]},
                 'can_edit': True,
                 'can_create': True,
                 'can_delete': True,
@@ -136,12 +148,15 @@ class Role(database.Model, RoleMixin):
 
         if self.name == 'staff':
             return {
-                'project_fields': [
-                    'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
-                    'engineer_id', 'owner_id', 'priority', 'quantity',
-                    'serials', 'number', 'name',
-                    'version', 'description', 'link', 'link2',
-                ],
+                'project_fields': {
+                    'view': [
+                        'stage_id', 'status_id', 'type_id', 'tobedone_id', 'client_id',
+                        'engineer_id', 'owner_id', 'priority', 'quantity',
+                        'serials', 'number', 'name',
+                        'version', 'description', 'link', 'link2'],
+                    'edit': ['link', 'link2', 'description', 'stage_id']
+                },
+
                 'can_edit': True,
                 'can_create': False,
                 'can_delete': False,
@@ -149,12 +164,20 @@ class Role(database.Model, RoleMixin):
 
         if self.name == 'client':
             return {
-                'project_fields': [
-                    'stage_id', 'status_id', 'client_id',
-                    'engineer_id', 'owner_id', 'priority', 'quantity',
-                    'serials', 'number', 'name',
-                    'version', 'link', 'link2',
-                ],
+                'project_fields': {
+                    'view': [
+                        'stage_id', 'status_id',
+                        'engineer_id', 'owner_id', 'priority', 'quantity',
+                        'serials', 'number', 'name',
+                        'version', 'link', 'link2',
+                    ],
+                    'edit': [
+                        'stage_id', 'status_id',
+                        'engineer_id', 'owner_id', 'priority', 'quantity',
+                        'serials', 'number', 'name',
+                        'version', 'link', 'link2',
+                    ]
+                },
                 'can_edit': False,
                 'can_create': False,
                 'can_delete': False,

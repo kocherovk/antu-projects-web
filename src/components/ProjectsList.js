@@ -163,7 +163,11 @@ class ProjectsList extends React.Component {
   }
 
   canView(field) {
-    return this.props.currentUser && this.props.currentUser.rights.project_fields.indexOf(field) != -1;
+    return this.props.currentUser && this.props.currentUser.rights.project_fields.view.indexOf(field) != -1;
+  }
+
+  canEditProjectField(field) {
+    return this.props.currentUser && this.props.currentUser.rights.project_fields.edit.indexOf(field) != -1;
   }
 
   render() {
@@ -192,14 +196,11 @@ class ProjectsList extends React.Component {
       { id: 'serials', label: 'Serials' },
       { id: 'description', label: 'Description' },
       { id: 'order_number', label: 'Order number' },
-      { id: 'eur', label: 'EUR' },
-      { id: 'eur_inv', label: 'EUR inv' },
-      { id: 'nzd', label: 'NZD' },
-      { id: 'nzd_inv', label: 'NZD inv' },
       { id: 'client_po', label: 'Client PO' },
       { id: 'quote_date', label: 'Quote date' },
       { id: 'quote_number', label: 'Quote number' },
       { id: 'quote_price', label: 'Quote price' },
+      { id: 'still_to_invoice', label: 'Still to invoice' },
       { id: 'invoice_number', label: 'Invoice number' },
       { id: 'invoice_amount', label: 'Invoice amount' },
       { id: 'invoice_sent', label: 'Invoice sent' },
@@ -214,7 +215,7 @@ class ProjectsList extends React.Component {
       'all': rows.map(r => r.id),
       'finance': [
         'number', 'name', 'client_id', 'finance_status_id',
-        'order_number', 'eur', 'eur_inv', 'nzd', 'nzd_inv', 'client_po', 
+        'order_number', 'client_po',
         'quote_date', 'quote_number', 'quote_price',
         'invoice_number', 'invoice_amount', 'invoice_sent', 'invoice_paid',
         'date_of_order', 'deliver_when', 'date_finish', 'finance_remarks'
@@ -232,7 +233,7 @@ class ProjectsList extends React.Component {
     if (this.props.currentUser) {
       displayTableViewModeSelect = this.props.currentUser.roles.indexOf('admin') != -1;
       availableRows = rows.filter((r) => {
-        return  this.props.currentUser.rights.project_fields.indexOf(r.id) != -1 &&
+        return  this.props.currentUser.rights.project_fields.view.indexOf(r.id) != -1 &&
                 rowsPerViewMode[this.state.tableViewMode].indexOf(r.id) != -1;
       }
     )}
@@ -285,6 +286,7 @@ class ProjectsList extends React.Component {
           createFunc={(project) => this.createProject(project)}
           updateFunc={(project) => this.updateProject(project)}
           canView={(field) => this.canView(field)}
+          canEdit={(field) => this.canEditProjectField(field)}
         />
         <ProjectsFilter
           filter={this.state.projectsFilter}
@@ -306,20 +308,9 @@ class ProjectsList extends React.Component {
             <MenuItem value='resume'>Resume</MenuItem>
           </TextField>
         </Grid>}
-        <Grid container spacing={24}>
-          <Grid item lg={12} md={12}>
-            <EnrichedTable
-              orderBy='id'
-              order='desc'
-              rowsPerPage={10}
-              title='Projects'
-              rows={availableRows}
-              data={projectsRows}
-              selectedItemChanged={(id) => this.setState({ selectedProject: id })}
-            >
-            </EnrichedTable>
-          </Grid>
-          <Grid item lg={12}>
+
+        <Grid container>
+            <Grid item lg={12}>
             {this.canCreate() && <Button
               className={classes.button}
               onClick={() => this.handleCreateProject()}
@@ -345,6 +336,21 @@ class ProjectsList extends React.Component {
               size="small">
               Delete Project
             </Button>}
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={24}>
+          <Grid item lg={12} md={12}>
+            <EnrichedTable
+              orderBy='id'
+              order='desc'
+              rowsPerPage={10}
+              title='Projects'
+              rows={availableRows}
+              data={projectsRows}
+              selectedItemChanged={(id) => this.setState({ selectedProject: id })}
+            >
+            </EnrichedTable>
           </Grid>
         </Grid>
       </div>
