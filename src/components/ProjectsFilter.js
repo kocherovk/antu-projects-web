@@ -19,7 +19,7 @@ class ProjectsFilter extends React.Component {
   static defaultProps = {
     filter: {
       stage_id: '',
-      status_id: '1',
+      status_id: '',
       type_id: '',
       tobedone_id: '',
       client_id: '',

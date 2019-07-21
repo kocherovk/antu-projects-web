@@ -20,7 +20,7 @@ class ProjectsList extends React.Component {
   state = {
     projects: [],
     projectsLoaded: false,
-    projectsFilter: {},
+    projectsFilter: {status_id: 1},
     projectsFieldsOptions: {
       types: [],
       stages: [],
@@ -82,7 +82,7 @@ class ProjectsList extends React.Component {
   }
 
   componentDidMount() {
-    this.loadProjects();
+    this.loadProjects(this.state.projectsFilter);
     this.loadProjectFieldsOptions();
   }
 
@@ -107,7 +107,7 @@ class ProjectsList extends React.Component {
     fetch('/api/project/' + id, {
       method: 'DELETE'
     }).then(() => {
-      this.loadProjects();
+      this.loadProjects(this.state.projectsFilter);
     });
   }
 
@@ -132,7 +132,7 @@ class ProjectsList extends React.Component {
         "Content-Type": "application/json; charset=utf-8"
       },
       body: JSON.stringify(project)
-    }).then(() => this.loadProjects());
+    }).then(() => this.loadProjects(this.state.projectsFilter));
   }
 
   updateProject(project) {
@@ -146,7 +146,7 @@ class ProjectsList extends React.Component {
       },
       body: JSON.stringify(project)
     }).then(() => {
-      this.loadProjects()
+      this.loadProjects(this.state.projectsFilter)
     });
   }
 
